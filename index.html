@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stopwatch</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Arial', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #f0f0f0;
+    }
+
+    .stopwatch {
+      background-color: #ffffff;
+      padding: 40px;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+
+    .time {
+      font-size: 48px;
+      font-weight: bold;
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    .controls {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+    }
+
+    .button {
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .start {
+      background-color: #4caf50;
+      color: white;
+    }
+
+    .start:hover {
+      background-color: #45a049;
+    }
+
+    .reset {
+      background-color: #f44336;
+      color: white;
+    }
+
+    .reset:hover {
+      background-color: #e53935;
+    }
+  </style>
+</head>
+<body>
+  <div class="stopwatch">
+    <div id="time" class="time">00:00:00</div>
+    <div class="controls">
+      <button id="startStop" class="button start">Start</button>
+      <button id="reset" class="button reset">Reset</button>
+    </div>
+  </div>
+
+  <script>
+    let timer;
+    let isRunning = false;
+    let seconds = 0;
+    let minutes = 0;
+    let hours = 0;
+
+    const timeDisplay = document.getElementById("time");
+    const startStopButton = document.getElementById("startStop");
+    const resetButton = document.getElementById("reset");
+
+    function updateTime() {
+      seconds++;
+      if (seconds === 60) {
+        seconds = 0;
+        minutes++;
+        if (minutes === 60) {
+          minutes = 0;
+          hours++;
+        }
+      }
+
+      timeDisplay.textContent = `${formatTime(hours)}:${formatTime(minutes)}:${formatTime(seconds)}`;
+    }
+
+    function formatTime(unit) {
+      return unit < 10 ? "0" + unit : unit;
+    }
+
+    startStopButton.addEventListener("click", () => {
+      if (isRunning) {
+        clearInterval(timer);
+        startStopButton.textContent = "Start";
+      } else {
+        timer = setInterval(updateTime, 1000);
+        startStopButton.textContent = "Stop";
+      }
+      isRunning = !isRunning;
+    });
+
+    resetButton.addEventListener("click", () => {
+      clearInterval(timer);
+      isRunning = false;
+      seconds = 0;
+      minutes = 0;
+      hours = 0;
+      timeDisplay.textContent = "00:00:00";
+      startStopButton.textContent = "Start";
+    });
+  </script>
+</body>
+</html>
