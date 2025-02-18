@@ -71,7 +71,7 @@
 </head>
 <body>
   <div class="stopwatch">
-    <div id="time" class="time">00:00:00.000</div>
+    <div id="time" class="time">00:00:00</div>
     <div class="controls">
       <button id="startStop" class="button start">Start</button>
       <button id="reset" class="button reset">Reset</button>
@@ -84,32 +84,27 @@
     let seconds = 0;
     let minutes = 0;
     let hours = 0;
-    let milliseconds = 0;
 
     const timeDisplay = document.getElementById("time");
     const startStopButton = document.getElementById("startStop");
     const resetButton = document.getElementById("reset");
 
     function updateTime() {
-      milliseconds++;
-      if (milliseconds === 1000) {
-        milliseconds = 0;
-        seconds++;
-        if (seconds === 60) {
-          seconds = 0;
-          minutes++;
-          if (minutes === 60) {
-            minutes = 0;
-            hours++;
-          }
+      seconds++;
+      if (seconds === 60) {
+        seconds = 0;
+        minutes++;
+        if (minutes === 60) {
+          minutes = 0;
+          hours++;
         }
       }
 
-      timeDisplay.textContent = `${formatTime(hours)}:${formatTime(minutes)}:${formatTime(seconds)}.${formatTime(milliseconds, 3)}`;
+      timeDisplay.textContent = `${formatTime(hours)}:${formatTime(minutes)}:${formatTime(seconds)}`;
     }
 
-    function formatTime(unit, digits = 2) {
-      return unit.toString().padStart(digits, '0');
+    function formatTime(unit) {
+      return unit < 10 ? "0" + unit : unit;
     }
 
     startStopButton.addEventListener("click", () => {
@@ -117,7 +112,7 @@
         clearInterval(timer);
         startStopButton.textContent = "Start";
       } else {
-        timer = setInterval(updateTime, 1); // Update every millisecond
+        timer = setInterval(updateTime, 1000);
         startStopButton.textContent = "Stop";
       }
       isRunning = !isRunning;
@@ -129,8 +124,7 @@
       seconds = 0;
       minutes = 0;
       hours = 0;
-      milliseconds = 0;
-      timeDisplay.textContent = "00:00:00.000";
+      timeDisplay.textContent = "00:00:00";
       startStopButton.textContent = "Start";
     });
   </script>
